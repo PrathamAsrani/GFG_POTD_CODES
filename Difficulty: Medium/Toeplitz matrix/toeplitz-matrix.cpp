@@ -19,26 +19,36 @@ int main() {
         }
 
         bool b = isToepliz(a);
-        if (n == 2 && m == 4) {
-            cout << "0";
-        } else {
-            if (b == true)
-                cout << "true";
-            else
-                cout << "false";
-        }
+
+        if (b == true)
+            cout << "true";
+        else
+            cout << "false";
+
         cout << endl;
     }
     return 0;
 }
 // } Driver Code Ends
 
-
-
 bool isToepliz(vector<vector<int>>& mat) {
-    int val = mat[0][0];
-    for(int i = 1, j = 1; i < mat.size() and j < mat[0].size(); i++, j++) 
-        if(mat[i][j] != val) 
-            return false;
+    int n = mat.size(), m = mat[0].size();
+    for(int i = 0; i < n; i++){
+        int x = i, y = 0, val = mat[x][y];
+        while(x < n and y < m){
+            if(val != mat[x][y]) 
+                return false;
+            x++, y++;
+        }
+    }
+    for(int i = 1; i < m; i++){
+        int x = 0, y = i, val = mat[x][y];
+        while(x < n and y < m){
+            if(val != mat[x][y]) 
+                return false;
+            x++, y++;
+        }
+    }
     return true;
 }
+
