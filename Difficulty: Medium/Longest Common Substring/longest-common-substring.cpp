@@ -27,6 +27,32 @@ class Solution{
         return ans;
         */
         
+        /*
+        // top-down
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+        int ans = 0;
+        function<int(int, int)> fun = [&](int i, int j) -> int {
+            if (i == 0 || j == 0) return 0;
+            if (dp[i][j] != -1) return dp[i][j];
+            if (s[i - 1] == t[j - 1]) {
+                dp[i][j] = fun(i - 1, j - 1) + 1;
+            } else {
+                dp[i][j] = 0;
+            }
+            ans = max(ans, dp[i][j]);
+            return dp[i][j];
+        };
+    
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= m; ++j) {
+                fun(i, j);
+            }
+        }
+        return ans;
+        */
+        
+        /*
+        // bottom-up
         int ans = 0;
         int dp[n+1][m+1];
         for(int i = 0; i <= n; i++){
@@ -38,6 +64,21 @@ class Solution{
                 if(dp[i][j] > ans)
                     ans = dp[i][j];
             }
+        }
+        return ans;
+        */
+        
+        int ans = 0;
+        vector<int> dp(m+1, 0), curr(m+1, 0);
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= m; j++){
+                if(s[i-1] == t[j-1]){
+                    curr[j] = dp[j-1]+1;
+                    ans = max(ans, curr[j]);
+                }
+                else curr[j] = 0;
+            }
+            dp = curr;
         }
         return ans;
     }
