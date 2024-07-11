@@ -37,19 +37,35 @@ public:
     }
 };
 
-bool isSafe(int i, int j, int n, int m){
-    return i >= 0 && i < n && j >= 0 && j < m;
-}
-
 class Solution {
 public:
+    int delX[4] = {0, -1, 0, 1};
+    int delY[4] = {-1, 0, 1, 0};
+    
+    bool isSafe(int i, int j, int n, int m){
+        return i >= 0 && i < n && j >= 0 && j < m;
+    }
+    
+    void groupComp(vector<vector<int>>& grid, vector<vector<int>>& vis,
+        int i, int j, int n, int m, int group, int &size) {
+            if(i < 0 || i >= n || j < 0 || j >= m || grid[i][j] == 0 || vis[i][j] != -1)
+                return ;
+            vis[i][j] = group;
+            size++;
+            for(int k = 0; k < 4; k++){
+                int x = i+delX[k];
+                int y = j+delY[k];
+                groupComp(grid, vis, x, y, n, m, group, size);
+            }
+        }
+    
     int MaxConnection(vector<vector<int>>& grid) {
         int n = grid.size();
         int m = grid[0].size();
-        dsu d(n * m);
         
-        int delX[4] = {0, -1, 0, 1};
-        int delY[4] = {-1, 0, 1, 0};
+        /*
+        // dsu approach
+        dsu d(n * m);
         
         // Build DSU for all 1s
         for(int i = 0; i < n; i++) {
@@ -91,6 +107,44 @@ public:
         }
         
         return maxConnected;
+        */
+        
+        
+        // dfs
+        vector<vector<int>> vis(n, vector<int>(m, -1));
+        int group = 0, size, ans = 0;
+        unordered_map<int, int> sz;
+        unordered_set<int> us;
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == 1) {
+                    size = 0;
+                    groupComp(grid, vis, i, j, n, m, group, size);
+                    sz[group] = size;
+                    if(size > ans)
+                        ans = size;
+                    group++;
+                }
+            }
+        }
+        
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid[i][j] == 1) continue;
+                int tmp = 1;
+                us.clear();
+                for(int k = 0; k < 4; k++){
+                    int x = i+delX[k];
+                    int y = j+delY[k];
+                    if(isSafe(x, y, n, m) && grid[x][y] == 1 && us.find(vis[x][y]) == us.end()){
+                        us.insert(vis[x][y]);
+                        tmp += sz[vis[x][y]];
+                    }
+                }
+                ans = max(ans, tmp);
+            }
+        }
+        return ans;
     }
 };
 
