@@ -40,6 +40,19 @@ class Solution {
             merge(v, l, m, r);
         }
     }
+    
+    int LB(vector<int> &arr, int &x) {
+        int l = 0, r = arr.size()-1;
+        while(l <= r) {
+            int m = l+(r-l)/2;
+            if(arr[m] < x) {
+                l = m+1;
+            } else {
+                r = m-1;
+            }
+        }
+        return l;
+    }
   public:
     vector<int> constructLowerArray(vector<int> &arr) {
         int n = arr.size();
@@ -56,10 +69,22 @@ class Solution {
         return ans;
         */
         
+        /*
         vector<pair<int, int>> v;
         for(int i = 0; i < n; v.push_back({arr[i], i}), i++);
         ans.resize(n, 0);
         ms(v, 0, n-1);
+        return ans;
+        */
+        
+        vector<int> ans(n, 0);
+        vector<int> tmp = {arr[n-1]};
+        for(int i = n-2; i >= 0; i--){
+            // int idx = (lower_bound(tmp.begin(), tmp.end(), arr[i]) - tmp.begin());
+            int idx = LB(tmp, arr[i]);
+            ans[i] = idx;
+            tmp.insert(tmp.begin() + idx, arr[i]);
+        }
         return ans;
     }
     
