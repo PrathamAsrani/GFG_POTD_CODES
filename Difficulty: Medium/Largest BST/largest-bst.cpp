@@ -99,37 +99,35 @@ struct Node {
     }
 };*/
 
-struct Result{
-    bool isBST;
-    int sum;
-    int minVal;
-    int maxVal;
-    int size;
+class ds{
+    public:
+        int maxi, mini, isBst, size;
+        ds(int bst = 1) : maxi(-1e9), mini(1e9), isBst(bst), size(0) {}
 };
-Result helper(Node *root, int &ans){
-    if(!root) {
-        return {true, 0, INT_MAX, INT_MIN, 0};
-    }
-    Result left = helper(root->left, ans);
-    Result right = helper(root->right, ans);
-    if(left.isBST && right.isBST && root->data > left.maxVal && root->data < right.minVal){
-        int sum = root->data + left.sum + right.sum;
-        int size = left.size + right.size +1;
-        ans = max(size, ans);
-        return {true, sum, min(root->data, left.minVal), max(root->data, right.maxVal), size};
-    }else{
-        return {false, 0, 0, 0, 0};
-    }
-}
+
 class Solution{
+    int size = 0;
     public:
     /*You are required to complete this method */
     // Return the size of the largest sub-tree which is also a BST
+    ds fun(Node *root){
+        if(!root) return ds(1);
+    	ds left = fun(root->left);
+    	ds right = fun(root->right);
+    	if(left.isBst == 1 && right.isBst == 1 && root->data > left.maxi && root->data < right.mini){
+    	    ds ans(1);
+    	    ans.size = left.size + right.size + 1;
+    	    ans.mini = min(root->data, left.mini);
+    	    ans.maxi = max(root->data, right.maxi);
+    	    size = max(size, ans.size);
+    	    return ans;
+    	} 
+    	return ds(0);
+    }
     int largestBst(Node *root)
     {
-    	int ans = 0;
-    	helper(root, ans);
-    	return ans;
+    	fun(root);
+    	return size;
     }
 };
 
