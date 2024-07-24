@@ -34,8 +34,12 @@ class Solution {
         }
         return {0, 0, 0};
     }
-    bool isBST(Node* root) {
+    bool isBST(Node* root, int mini = -1000000000, int maxi = 1000000000) {
         return fun(root)[0];
+        // if(!root) return 1;
+        // if(root->data <= mini || root->data >= maxi)
+        //     return 0;
+        // return isBST(root->left, mini, root->data) && isBST(root->right, root->data, maxi);
     }
 };
 
