@@ -1,53 +1,45 @@
 //{ Driver Code Starts
 //Initial template for C++
 
-#include<bits/stdc++.h> 
-using namespace std; 
+#include <bits/stdc++.h>
+using namespace std;
 
 // } Driver Code Ends
 //User function template for C++
 
-class Solution{   
-    int n;
-public:
-    int LPS(string &s){
-        vector<int> dp(n, 0);
-        for(int i = n-1; i >= 0; i--){
-            vector<int> curr(n, 0);
-            curr[i] = 1;
-            for(int j = i+1; j < n; j++){
-                int val = 0;
-                if(s[i] == s[j]){
-                    val = 2 + dp[j-1];
-                }else{
-                    val = max(dp[j], curr[j-1]);
-                }
-                curr[j] = val;
-            }
-            dp = curr;
+class Solution{
+    vector<vector<int>> dp;
+    int LPS(int i, int j, string &s){
+        if(i > j) return 0;
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        if(s[i] == s[j]){
+            if(i == j) return dp[i][j] = 1 + LPS(i+1, j-1, s);
+            else return dp[i][j] = 2 + LPS(i+1, j-1, s);
+        } else {
+            return dp[i][j] = max(LPS(i+1, j, s), LPS(i, j-1, s));
         }
-        return dp[n-1];
     }
-    int findMinInsertions(string s){
-        n = s.size();
-        return n - LPS(s);
+  public:
+    int countMin(string str){
+        int n = str.size();
+        dp.resize(n, vector<int>(n, -1));
+        return n - LPS(0, n-1, str);
     }
 };
 
 //{ Driver Code Starts.
-
-
-
 int main(){
     int t;
-    cin>>t;
+    cin >> t;
     while(t--){
-        string S;
-        cin>>S;
+        string str;
+        cin >> str;
         Solution ob;
-        cout<<ob.findMinInsertions(S)<<endl;
+        cout << ob.countMin(str) << endl;
     }
-    return 0;
+return 0;
 }
+
 
 // } Driver Code Ends
