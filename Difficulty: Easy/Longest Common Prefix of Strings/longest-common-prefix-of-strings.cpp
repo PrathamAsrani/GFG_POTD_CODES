@@ -10,26 +10,15 @@ using namespace std;
 
 class Solution {
   public:
+
     string longestCommonPrefix(vector<string> arr) {
-        string ans = "";
-        int n = arr.size(), len = arr[0].size();
-        int idx = 0;
-        for(int i = 0; i < len; i++){
-            char c = arr[0][idx];
-            bool flag = true;
-            for(int j = 0; j < n; j++){
-                if(arr[j].size() <= idx || arr[j][idx] != c){
-                    flag = false;
-                    break;
-                }
-            }
-            if(flag)
-                ans += c;
-            else 
-                break;
-            idx++;
-        }
-        return ans == "" ? "-1" : ans;
+        int n = arr.size();
+        if(!n) return "-1";
+        else if(n == 1) return arr[0];
+        sort(arr.begin(), arr.end());
+        int leng = min(arr[0].size(), arr[n-1].size()), i = 0, cnt = 0;
+        while(i < leng && arr[0][i] == arr[n-1][i]) cnt++, i++;
+        return (cnt)? arr[0].substr(0, cnt):"-1";
     }
 };
 
