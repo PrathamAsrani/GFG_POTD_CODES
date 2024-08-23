@@ -128,8 +128,23 @@ struct Node
  */
 
 //Function to return a list containing elements of left view of the binary tree.
+
+int mx_depth;
+vector<int> ans;
+
+void dfs(Node *root, int depth = 0){
+    if(!root) return ;
+    if(depth > mx_depth){
+        mx_depth = depth;
+        ans.push_back(root->data);
+    }
+    dfs(root->left, depth+1);
+    dfs(root->right, depth+1);
+}
+
 vector<int> leftView(Node *root)
 {
+    /*
    if(!root) return {};
    vector<int> ans;
    queue<Node *> q;
@@ -143,5 +158,10 @@ vector<int> leftView(Node *root)
            if(node->right) q.push(node->right);
        }
    }
+   return ans;
+   */
+   mx_depth = -1;
+   ans.clear();
+   dfs(root);
    return ans;
 }
