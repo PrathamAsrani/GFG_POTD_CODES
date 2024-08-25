@@ -13,20 +13,25 @@ class Solution{
     unordered_map<string, bool> dp;
     public:
     bool isScramble(string s, string t){
-        if(s == t) return true;
-        if(s.size() != t.size()) return false;
-        if(dp.find(s+t) != dp.end()) return dp[s+t];
-        
+        //code here
+        if(s == t) return 1; // O(N)
         int n = s.size();
+        if(n == 1) return 0;
+        
+        string key = s + " " + t; // O(N)
+        if(dp.find(key) != dp.end()) return dp[key]; // O(N)
+        
         for(int i = 1; i < n; i++){
-            bool swapped = isScramble(s.substr(0, i), t.substr(n-i, i)) && isScramble(s.substr(i, n-i), t.substr(0, n-i));
-            if(swapped)
-                return dp[s+t] = true;
-            bool notSwapped = isScramble(s.substr(0, i), t.substr(0, i)) && isScramble(s.substr(i, n-i), t.substr(i, n-i));
-            if(notSwapped)
-                return dp[s+t] = true;
+            if(isScramble(s.substr(0, i), t.substr(0, i)) 
+                && isScramble(s.substr(i), t.substr(i))){
+                    return dp[key] = true;
+                }
+            if(isScramble(s.substr(0, i), t.substr(n-i)) 
+                && isScramble(s.substr(i), t.substr(0, n-i))){
+                    return dp[key] = true;
+                }
         }
-        return dp[s+t] = false;
+        return dp[key] = false;
     }    
 };
 
