@@ -5,27 +5,23 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
-    int n, m;
-    vector<vector<int>> dp;
-    int f(string s, string p, int i = 0, int j = 0){
-        // base case
+    int dp[201][201];
+    bool fun(string &a, string &b, int i, int j){
+        if(i == a.size() && j == b.size()) return true;
+        if(j == b.size() && a[i] == '*') return fun(a, b, i+1, j);
+        if(i == a.size() || j == b.size()) return false;
         if(dp[i][j] != -1) return dp[i][j];
-        if(i >= n and j >= m) return 1;
-        if(i >= n and j < m and p[j] == '*') return f(s, p, i, j+1);
-        if(i >= n || j >= m) return 0;
         
-        // func-s call
-        if(p[j] == '*') return dp[i][j] = f(s, p, i+1, j) || f(s, p, i, j+1);
-        if(p[j] == '?' || s[i] == p[j]) return dp[i][j] = f(s, p, i+1, j+1);
-        return dp[i][j] = 0;
+        if(a[i] == '*') return dp[i][j] = fun(a, b, i, j+1) || fun(a, b, i+1, j);
+        if(a[i] == b[j] || a[i] == '?') return dp[i][j] = fun(a, b, i+1, j+1);
+        return dp[i][j] = false;
     }
   public:
     /*You are required to complete this method*/
-    int wildCard(string p, string s) {
-        n = s.size(), m = p.size();
-        
-        dp.resize(n+1, vector<int>(m+1, -1));
-        return f(s, p);
+    int wildCard(string pattern, string str) {
+        // code here
+        memset(dp, -1, sizeof(dp));
+        return fun(pattern, str, 0, 0);
     }
 };
 
