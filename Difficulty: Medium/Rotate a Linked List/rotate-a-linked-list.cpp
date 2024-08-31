@@ -40,15 +40,19 @@ class Solution {
   public:
     // Function to rotate a linked list.
     Node* rotate(Node* head, int k) {
+        // Your code here
         Node *ptr = head, *prev = nullptr;
         while(ptr && k--){
             prev = ptr;
             ptr = ptr->next;
         }
         if(ptr == head) return head;
-        Node* start = ptr == nullptr ? head : ptr;
+        Node *start = (ptr == nullptr) ? head : ptr;
         if(prev) prev->next = nullptr;
-        while(ptr && ptr->next) ptr = ptr->next;
+        while(ptr){
+            if(!ptr->next) break;
+            ptr = ptr->next;
+        }
         if(ptr) ptr->next = head;
         return start;
     }
