@@ -4,31 +4,35 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution{
+	int dp[1001][1001];
+	int helper(string s, string t, int i = 0, int j = 0){
+	    // case 1: if s is empty and t having chars then insert the remaining
+	    if(i == s.size()) return t.size()-j;
+	    // case 1: if s is having chars and t is empty then erase the remaining
+	    if(j == t.size()) return s.size()-i;
+	    
+	    if(dp[i][j] != -1) return dp[i][j];
+	    
+	    int ans = 1e9;
+	    if(s[i] == t[j]){
+	        ans = min(ans, helper(s, t, i+1, j+1));
+	    } else {
+	        // insert
+	        ans = min(ans, helper(s, t, i+1, j)+1);
+	        // delete
+	        ans = min(ans, helper(s, t, i, j+1)+1);
+	    }
+	    return dp[i][j] = ans;
+	}
 	public:
-	int n, m;
-    int LCS(string &s, string &t){
-        vector<int> dp(m+1, 0);
-        for(int i = 1; i <= n; i++){
-            vector<int> curr(m+1, 0);
-            for(int j = 1; j <= m; j++){
-                int val = 0;
-                if(s[i-1] == t[j-1]){
-                    val = 1 + dp[j-1];
-                }else{
-                    val = max(dp[j], curr[j-1]);
-                }
-                curr[j] = val;
-            }
-            dp = curr;
-        }
-        return dp[m];
-    }
 	int minOperations(string s, string t) 
-	{
-	    n = s.size(), m = t.size();
-        return n+m-(2*LCS(s, t));
+	{ 
+	    // Your code goes here
+	    memset(dp, -1, sizeof(dp));
+	    return helper(s, t);
 	} 
 };
+
 
 //{ Driver Code Starts.
 int main() 
