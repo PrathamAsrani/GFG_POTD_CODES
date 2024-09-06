@@ -19,9 +19,23 @@ class Solution{
     public:
     int solve(int n, int k, vector<int>& arr){
         // Code here
+        /*
         dp = new int[n];
         for(int i = 0; i < n; i++) dp[i] = -1;
         return fun(arr, 0, k, n);
+        */
+        
+        dp = new int[n+1];
+        for(int i = 0; i <= n; i++) dp[i] = 0;
+        for(int i = n-1; i >= 0; i--){
+            int mx = -1e9, ans = 0;
+            for(int j = i; j < min(i+k, n); j++){
+                if(arr[j] > mx) mx = arr[j];
+                ans = max(ans, mx*(j-i+1) + dp[j+1]);
+            }
+            dp[i] = ans;
+        }
+        return dp[0];
     }
 };
 
