@@ -5,26 +5,21 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
-    vector<vector<int>> dp;
-    int n;
-    int fun(vector<int> &wt, vector<int>& val, int i, int cap){
-        if(i == n) return 0;
-        if(dp[i][cap] != -1) return dp[i][cap];
-        
-        int notTake = fun(wt, val, i+1, cap);
-        int take = 0;
-        if(cap >= wt[i]){
-            take = fun(wt, val, i+1, cap-wt[i]) + val[i];
-        }
-        return dp[i][cap] = max(take, notTake);
-    }
   public:
     // Function to return max value that can be put in knapsack of capacity W.
     int knapSack(int W, vector<int>& wt, vector<int>& val) {
         // Your code here
-        n = wt.size();
-        dp.resize(n, vector<int>(W+1, -1));
-        return fun(wt, val, 0, W);
+        int n = wt.size();
+        vector<vector<int>> dp(n+1, vector<int>(W+1, 0));
+        for(int i = n-1; i >= 0; i--){
+            for(int j = 0; j <= W; j++){
+                int notTake = dp[i+1][j];
+                int take = 0;
+                if(j >= wt[i]) take = dp[i+1][j-wt[i]] + val[i];
+                dp[i][j] = max(take, notTake);
+            }
+        }
+        return dp[0][W];
     }
 };
 
