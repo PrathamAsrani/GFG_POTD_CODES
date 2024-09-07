@@ -2,81 +2,23 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
 // } Driver Code Ends
 class Solution {
   public:
-    int helper(int idx, int prev, vector<vector<int>> &points, vector<vector<int>> &dp){
-        if(dp[idx][prev+1] != -1) return dp[idx][prev+1];
-        int ans = 0;
-        if(idx == 0) {
-            for(int i = 0; i < 3; i++){
-                if(prev == i) continue;
-                ans = max(ans, points[idx][i]);
-            }
-            return dp[idx][prev+1] =  ans;
-        }
-        for(int i = 0; i < 3; i++){
-            if(i == prev) continue;
-            ans = max(ans, helper(idx-1, i, points, dp) + points[idx][i]);
-        }
-        return dp[idx][prev+1] = ans;
-    }
-    int maximumPoints(vector<vector<int>>& points, int n) {
-        /*
-        // TOP DOWN
-        // TC: O(N*4*3), SC: O(N*3) + O(N)
-        vector<vector<int>> dp(n, vector<int>(4, -1));
-        return helper(n-1, -1, points, dp);
-        */
-        
-        /*
-        vector<vector<int>> dp(n, vector<int>(4, 0));\
-        // prev = -1, therefore max({day[0], day[1], day[2]})
-        dp[0][0] = max({points[0][0], points[0][1], points[0][2]});
-        // prev = 0, therefore max(day[1], day[2])
-        dp[0][1] = max(points[0][1], points[0][2]);
-        // prev = 1, therefore max(day[0], day[2])
-        dp[0][2] = max(points[0][0], points[0][2]);
-        // prev = 2, therefore max(day[0], day[1])
-        dp[0][3] = max(points[0][0], points[0][1]);
-    
-        for(int idx = 1; idx < n; idx++){
-            for(int prev = 0; prev < 4; prev++){
-                int ans = 0;
-                for(int i = 0; i < 3; i++){
-                    if(i+1 == prev) continue;
-                    ans = max(ans, dp[idx-1][i+1] + points[idx][i]);
-                }
-                dp[idx][prev] = ans;
+    int maximumPoints(vector<vector<int>>& arr, int n) {
+        // Code here
+        vector<vector<int>> dp(n+1, vector<int>(3, 0));
+        for(int i = n-1; i >= 0; i--){
+            for(int j = 0; j < 3; j++){
+                int point = 0;
+                point = max({point, arr[i][j] + dp[i+1][(j+1)%3], arr[i][j] + dp[i+1][(j+2)%3]});
+                dp[i][j] = point;
             }
         }
-        return dp[n-1][0];
-        */
-        
-        vector<int> dp(4, 0);
-        // prev = -1, therefore max({day[0], day[1], day[2]})
-        dp[0] = max({points[0][0], points[0][1], points[0][2]});
-        // prev = 0, therefore max(day[1], day[2])
-        dp[1] = max(points[0][1], points[0][2]);
-        // prev = 1, therefore max(day[0], day[2])
-        dp[2] = max(points[0][0], points[0][2]);
-        // prev = 2, therefore max(day[0], day[1])
-        dp[3] = max(points[0][0], points[0][1]);
-    
-        for(int idx = 1; idx < n; idx++){
-            vector<int> tmp(4, 0);
-            for(int prev = 0; prev < 4; prev++){
-                for(int i = 0; i < 3; i++){
-                    if(i+1 == prev) continue;
-                    tmp[prev] = max(tmp[prev], dp[i+1] + points[idx][i]);
-                }
-            }
-            dp = tmp;
-        }
-        return dp[0];
+        return *max_element(dp[0].begin(), dp[0].end());
     }
 };
-
 
 //{ Driver Code Starts.
 int main() {
@@ -85,7 +27,7 @@ int main() {
     while (t--) {
         int n;
         cin >> n;
-        vector<vector<int>> points;
+        vector<vector<int>> arr;
         for (int i = 0; i < n; ++i) {
             vector<int> temp;
             for (int j = 0; j < 3; ++j) {
@@ -93,11 +35,11 @@ int main() {
                 cin >> x;
                 temp.push_back(x);
             }
-            points.push_back(temp);
+            arr.push_back(temp);
         }
 
         Solution obj;
-        cout << obj.maximumPoints(points, n) << endl;
+        cout << obj.maximumPoints(arr, n) << endl;
     }
     return 0;
 }
