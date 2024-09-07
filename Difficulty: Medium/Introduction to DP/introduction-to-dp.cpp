@@ -12,20 +12,24 @@ class Solution {
     int mod = 1e9+7;
     int dp[10001];
   public:
-    Solution(){
-        memset(dp, -1, sizeof(dp));
-    }
+  Solution(){
+      memset(dp, -1, sizeof(dp));
+  }
     long long int topDown(int n) {
-        if(n == 0 || n == 1) return n;
+        // code here
+        if(n == 0) return 0;
+        if(n == 1) return 1;
+        if(n == 2) return 1;
         if(dp[n] != -1) return dp[n];
         return dp[n] = (topDown(n-1) + topDown(n-2))%mod;
     }
     long long int bottomUp(int n) {
+        // code here
         int a = 0, b = 1;
         for(int i = 2; i <= n; i++){
-            int tmp = (a+b)%mod;
+            int c = (a+b)%mod;
             a = b;
-            b = tmp;
+            b = c;
         }
         return b;
     }
