@@ -6,16 +6,16 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    int minimumEnergy(vector<int>& hei, int n) {
+    int minimumEnergy(vector<int>& height, int n) {
         // Code here
-        int dp[n];
-        dp[0] = 0;
+        int k = 2;
+        vector<int> dp(n, 0);
         for(int i = 1; i < n; i++){
-            int two = 1e9;
-            int one = dp[i-1] + abs(hei[i] - hei[i-1]);
-            if(i > 1) two = dp[i-2] + abs(hei[i] - hei[i-2]);
-            
-            dp[i] = min(one, two);
+            int step = 1e9;
+            for(int j = i-1; j >= max(0, i-k); j--){
+                step = min(step, dp[j] + abs(height[j] - height[i]));
+            }
+            dp[i] = step == 1e9 ? 0 : step;
         }
         return dp[n-1];
     }
