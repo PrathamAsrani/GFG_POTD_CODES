@@ -12,21 +12,24 @@ public:
     int maximumPath(int n, vector<vector<int>> grid)
     {
         // code here
-        vector<vector<int>> dp(n, vector<int>(n, 0));
+        vector<int> dp(n, 0), curr;
         for(int i = 0; i < n; i++){
+            curr.assign(n, 0);
             for(int j = 0; j < n; j++){
-                if(i == 0) dp[i][j] = grid[i][j];
+                if(i == 0) curr[j] = grid[i][j];
                 else{
-                    int a = (j > 0) ? dp[i-1][j-1] : 0;
-                    int b = dp[i-1][j];
-                    int c = (j+1 < n) ? dp[i-1][j+1] : 0;
-                    dp[i][j] = max({a, b, c}) + grid[i][j];
+                    int a = (j > 0) ? dp[j-1] : 0;
+                    int b = dp[j];
+                    int c = (j+1 < n) ? dp[j+1] : 0;
+                    curr[j] = max({a, b, c}) + grid[i][j];
                 }
             }
+            dp = curr;
         }
-        return *max_element(dp[n-1].begin(), dp[n-1].end());
+        return *max_element(dp.begin(), dp.end());
     }
 };
+
 
 //{ Driver Code Starts.
 
