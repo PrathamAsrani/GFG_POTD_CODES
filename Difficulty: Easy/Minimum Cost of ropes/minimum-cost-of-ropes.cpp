@@ -10,14 +10,16 @@ class Solution {
     // Function to return the minimum cost of connecting the ropes.
     long long minCost(vector<long long>& arr) {
         // Your code here
-        priority_queue<ll, vector<ll>, greater<ll>> pq;
-        for(int x: arr) pq.push(x);
+        multiset<ll> ms;
+        for(ll &x: arr) ms.insert(x);
         ll ans = 0;
-        while(pq.size() >= 2){
-            ll tp1 = pq.top(); pq.pop();
-            ll tp2 = pq.top(); pq.pop();
-            pq.push(tp1+tp2);
-            ans += tp1+tp2;
+        while(ms.size() > 1){
+            ll tp1 = *ms.begin();
+            ms.erase(ms.begin());
+            ll tp2 = *ms.begin();
+            ms.erase(ms.begin());
+            ans += tp1 + tp2;
+            ms.insert(tp1+tp2);
         }
         return ans;
     }
