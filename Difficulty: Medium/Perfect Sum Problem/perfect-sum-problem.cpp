@@ -8,21 +8,24 @@ class Solution{
 	public:
 	int perfectSum(int arr[], int n, int sum)
 	{
-        // Your code goes here
+        vector<int> dp(sum+1, 0);
         int mod = 1e9+7;
-        vector<vector<int>> dp(n+1, vector<int>(sum+1, 0));
-        for(int i = 1; i <= sum; i++) dp[n][i] = 0;
-        dp[n][0] = 1; // at last sum becomes 0
+        dp[0] = 1;
         for(int i = n-1; i >= 0; i--){
+            vector<int> curr(sum+1, 0);
+            curr[0] = 1;
             for(int j = 0; j <= sum; j++){
-                int a = dp[i+1][j];
-                int b = 0;
-                if(arr[i] <= j) b = dp[i+1][j-arr[i]];
-                dp[i][j] = (a+b)%mod;
+                int notTake = dp[j];
+                int take = 0;
+                if(j >= arr[i])
+                    take = dp[j-arr[i]];
+                curr[j] = (take+notTake)%mod;
             }
+            dp = curr;
         }
-        return dp[0][sum];
+        return dp[sum];
 	}
+	  
 };
 
 //{ Driver Code Starts.
