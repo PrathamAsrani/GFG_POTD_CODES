@@ -117,29 +117,25 @@ struct Node
 
 // This function should return head to the DLL
 class Solution {
-    vector<int> in;
-    Node *insert(Node *head, Node *&tail, int x){
-        if(!head) return tail = new Node(x);
-        tail->right = new Node(x);
-        tail->right->left = tail;
-        tail = tail->right;
-        return head;
-    }
+    Node *prev = nullptr, *start = nullptr;
   public:
     void inOrder(Node *root){
         if(!root) return ;
         inOrder(root->left);
-        in.push_back(root->data);
+        if(!start){
+            start = root;
+        }
+        if(prev){
+            prev->right = root;
+            root->left = prev;
+        }
+        prev = root;
         inOrder(root->right);
     }
     Node* bToDLL(Node* root) {
         // code here
         inOrder(root);
-        Node *head = nullptr, *tail = nullptr;
-        for(int x: in){
-            head = insert(head, tail, x);
-        }
-        return head;
+        return start;
     }
 };
 
