@@ -5,42 +5,58 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
+    int n, m;
+    int fun(int i, int j, string &s, string &t){
+        if(i == n || j == m || s[i] != t[j])
+            return 0;
+        
+        return 1 + fun(i+1, j+1, s, t);
+    }
   public:
     int longestCommonSubstr(string s, string t) {
         // your code here
-        int n = s.size(), m = t.size();
         /*
+        n = s.size(), m = t.size();
         vector<string> arr;
         for(int i = 0; i < n; i++){
-            string tmp;
+            string sub;
             for(int j = i; j < n; j++){
-                tmp += s[j];
-                arr.push_back(tmp);
+                sub += s[j];
+                arr.push_back(sub);
             }
         }
         int ans = 0;
-        for(auto &sub: arr){
+        for(string &sub: arr){
             if(t.find(sub) != string::npos){
-                ans = max(ans, (int)sub.size());
+                ans = max(ans, (int) sub.size());
             }
         }
         return ans;
         */
         
+        /*
+        n = s.size(), m = t.size();
         int ans = 0;
-        vector<int> dp(m+1, 0);
-        for(int i = 1; i <= n; i++){
-            vector<int> curr(m+1, 0);
-            for(int j = 1; j <= m; j++){
-                if(s[i-1] == t[j-1]){
-                    curr[j] = dp[j-1]+1;
-                    ans = max(ans, curr[j]);
-                } else curr[j] = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                ans = max(ans, fun(i, j, s, t));
             }
-            dp = curr;
         }
         return ans;
+        */
         
+        n = s.size(), m = t.size();
+        int ans = 0;
+        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+        for(int i = n-1; i >= 0; i--){
+            for(int j = m-1; j >= 0; j--){
+                if(s[i] == t[j]){
+                    dp[i][j] = 1 + dp[i+1][j+1];
+                    ans = max(ans, dp[i][j]);
+                }
+            }
+        }
+        return ans;
     }
 };
 
