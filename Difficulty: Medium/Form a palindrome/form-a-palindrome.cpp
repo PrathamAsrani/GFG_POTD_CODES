@@ -1,45 +1,80 @@
 //{ Driver Code Starts
 //Initial template for C++
 
-#include <bits/stdc++.h>
-using namespace std;
+#include<bits/stdc++.h> 
+using namespace std; 
 
 // } Driver Code Ends
 //User function template for C++
 
-class Solution{
-    vector<vector<int>> dp;
-    int LPS(int i, int j, string &s){
-        if(i > j) return 0;
-        if(dp[i][j] != -1) return dp[i][j];
-        
-        if(s[i] == s[j]){
-            if(i == j) return dp[i][j] = 1 + LPS(i+1, j-1, s);
-            else return dp[i][j] = 2 + LPS(i+1, j-1, s);
-        } else {
-            return dp[i][j] = max(LPS(i+1, j, s), LPS(i, j-1, s));
+class Solution{   
+    int n;
+public:
+    int LPS(string &s){
+        vector<int> dp(n, 0);
+        for(int i = n-1; i >= 0; i--){
+            vector<int> curr(n, 0);
+            curr[i] = 1;
+            for(int j = i+1; j < n; j++){
+                int val = 0;
+                if(s[i] == s[j]){
+                    val = 2 + dp[j-1];
+                }else{
+                    val = max(dp[j], curr[j-1]);
+                }
+                curr[j] = val;
+            }
+            dp = curr;
         }
+        return dp[n-1];
     }
-  public:
-    int countMin(string str){
-        int n = str.size();
-        dp.resize(n, vector<int>(n, -1));
-        return n - LPS(0, n-1, str);
+    
+    int LCS(string &s, string &t){
+        int n = s.size(), m = t.size();
+        vector<int> dp(m+1, 0);
+        
+        for(int i = 1; i <= n; i++){
+            vector<int> curr(m+1, 0);
+            for(int j = 1; j <= m; j++){
+                int val = 0;
+                if(s[i-1] == t[j-1]){
+                    val = 1 + dp[j-1];
+                }else{
+                    val = max(dp[j], curr[j-1]);
+                }
+                curr[j] = val;
+            }
+            dp = curr;
+        }
+        return dp[m];
+    }
+        
+    int findMinInsertions(string s){
+        n = s.size();
+        
+        // 1. Longest Palindrome Subseq
+        // return n - LPS(s);
+        
+        string t = s;
+        reverse(s.begin(), s.end());
+        return n - LCS(s, t);
     }
 };
 
 //{ Driver Code Starts.
+
+
+
 int main(){
     int t;
-    cin >> t;
+    cin>>t;
     while(t--){
-        string str;
-        cin >> str;
+        string S;
+        cin>>S;
         Solution ob;
-        cout << ob.countMin(str) << endl;
+        cout<<ob.findMinInsertions(S)<<endl;
     }
-return 0;
+    return 0;
 }
-
 
 // } Driver Code Ends
