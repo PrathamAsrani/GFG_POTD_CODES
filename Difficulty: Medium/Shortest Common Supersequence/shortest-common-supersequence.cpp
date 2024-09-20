@@ -11,10 +11,35 @@ using namespace std;
 
 class Solution
 {
+    map<pair<int, int>, string> cache;
+    int n, m;
+    string fun(int i, int j, string &s, string &t){
+        if(i == n) return t.substr(j);
+        if(j == m) return s.substr(i);
+        if(cache.find({i, j}) != cache.end()) return cache[{i, j}];
+
+        string ans;
+        if(s[i] == t[j]){
+            ans = s[i] + fun(i+1, j+1, s, t);
+        } else {
+            string a = s[i] + fun(i+1, j, s, t);
+            string b = t[j] + fun(i, j+1, s, t);
+            ans = a.size() <= b.size() ? a : b;
+        }
+        return cache[{i, j}] = ans;
+    }
     public:
     //Function to find length of shortest common supersequence of two strings.
     int shortestCommonSupersequence(string s, string t, int n, int m)
     {
+        //code here
+        /*
+        // MLE 
+        this->n = n, this->m = m;
+        return fun(0, 0, s, t).size();
+        */
+        
+        // approach use LCS and backtrack
         vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
         for(int i = 1; i <= n; i++){
             for(int j = 1; j <= m; j++){
