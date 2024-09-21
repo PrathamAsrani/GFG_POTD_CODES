@@ -7,20 +7,31 @@ using namespace std;
 class Solution {
     vector<vector<int>> dp;
     int n, m;
-  public:
-    int fun(string &s, string &t, int i = 0, int j = 0){
+    int fun(int i, int j, string &s, string &t){
         if(i == n) return m-j;
         if(j == m) return n-i;
         if(dp[i][j] != -1) return dp[i][j];
-        if(s[i] == t[j])
-            return dp[i][j] = fun(s, t, i+1, j+1);
-        else 
-            return dp[i][j] = 1 + min({fun(s, t, i+1, j), fun(s, t, i, j+1), fun(s, t, i+1, j+1)});
+
+        int ans = 1e9;
+        if(s[i] == t[j]){
+            ans = fun(i+1, j+1, s, t);
+        } else {
+            ans = min({
+                fun(i+1, j, s, t), // delete i
+                fun(i, j+1, s, t), // insert 
+                fun(i+1, j+1, s, t) // replace
+            }) + 1;
+        }
+        return dp[i][j] = ans;
     }
+  public:
     int editDistance(string s, string t) {
+        // Code here
         n = s.size(), m = t.size();
-        dp.resize(n, vector<int>(m, -1));
-        return fun(s, t);
+        
+        /*
+        dp.assign(n, vector<int>(m, -1));
+        return fun(0, 0, s, t);
     }
 };
 
