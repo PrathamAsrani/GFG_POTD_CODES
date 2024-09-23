@@ -6,9 +6,25 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
+    typedef long long ll;
   public:
     vector<int> findTwoElement(vector<int>& arr) {
         // code here
+        /*
+        int n = arr.size();
+        ll miss = (n*(n+1))/2, rep = 0;
+        for(int i = 0; i < n; i++){
+            int idx = abs(arr[i])-1;
+            if(arr[idx] > 0){
+                arr[idx] = -arr[idx];
+                miss -= abs(arr[i]);
+            } else {
+                rep = abs(arr[i]);
+            }
+        }
+        return {rep, miss};
+        */
+        
         int n = arr.size();
         int hash[n+1] = {0};
         for(int &x: arr){
@@ -22,6 +38,7 @@ class Solution {
         return {rep, miss};
     }
 };
+
 
 //{ Driver Code Starts.
 
