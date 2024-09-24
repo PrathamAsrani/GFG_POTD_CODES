@@ -7,39 +7,41 @@ using namespace std;
 // } Driver Code Ends
 // User function Template for C++
 
-void dfs(int node, vector<vector<int>> &adj, vector<bool> &vis, string &ans){
-    vis[node] = true;
-    for(int nei: adj[node]){
-        if(!vis[nei]) dfs(nei, adj, vis, ans);
+class Solution {
+    void dfs(int node, vector<int> adj[], vector<bool> &vis, string &order){
+        vis[node] = true;
+        for(int &nei: adj[node]){
+            if(!vis[nei]){
+                dfs(nei, adj, vis, order);
+            }
+        }
+        order = char(node + 'a') + order;
     }
-    ans = char(node + 'a')+ans;
-}
-
-class Solution{
-    public:
-    string findOrder(string dict[], int N, int K) {
-        string ans = "";
-        vector<vector<int>> adj(K, vector<int>(0));
-        for(int i = 0; i < N-1; i++){
+  public:
+    string findOrder(string dict[], int n, int k) {
+        // code here
+        vector<int> adj[k];
+        for(int i = 0; i+1 < n; i++){
             string a = dict[i];
             string b = dict[i+1];
-            int j = 0, mn = min(a.size(), b.size());
-            while(j < mn){
+            int len = min(a.size(), b.size());
+            for(int j = 0; j < len; j++){
                 if(a[j] != b[j]){
                     adj[a[j] - 'a'].push_back(b[j] - 'a');
                     break;
                 }
-                j++;
             }
         }
-        vector<bool> vis(K, false);
-        for(int i = 0; i < K; i++){
-            if(!vis[i]) dfs(i, adj, vis, ans);
+        vector<bool> vis(k, 0);
+        string order;
+        for(int i = 0; i < k; i++){
+            if(!vis[i]){
+                dfs(i, adj, vis, order);
+            }
         }
-        return ans;
+        return order;
     }
 };
-
 
 //{ Driver Code Starts.
 string order;
