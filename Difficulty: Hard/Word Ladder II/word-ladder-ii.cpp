@@ -7,9 +7,38 @@ using namespace std;
 //User function Template for C++
 
 class Solution {
+    unordered_map<string, int> umpp;
+    int len;
+    string start;
+    vector<vector<string>> ans;
+    
+    void dfs(string word, vector<string> &seq){
+        if(word == start){
+            reverse(seq.begin(), seq.end());
+            ans.push_back(seq);
+            reverse(seq.begin(), seq.end());
+            return ;
+        }
+        
+        int steps = umpp[word];
+        for(int i = 0; i < len; i++){
+            char old = word[i];
+            for(char c = 'a'; c <= 'z'; c++){
+                word[i] = c;
+                if(umpp.find(word) != umpp.end() && umpp[word]+1 == steps){
+                    seq.push_back(word);
+                    dfs(word, seq);
+                    seq.pop_back();
+                }
+            }
+            word[i] = old;
+        }
+    }
+    
 public:
     vector<vector<string>> findSequences(string s, string t, vector<string>& words) {
         // code here
+        /*
         vector<vector<string>> ans;
         unordered_set<string> st(words.begin(), words.end());
         if(s == t || st.find(t) == st.end()) return {};
@@ -43,6 +72,40 @@ public:
                 }
                 word[i] = old;
             }
+        }
+        return ans;
+        */
+        
+        unordered_set<string> st(words.begin(), words.end());
+        queue<string> q;
+        st.erase(s);
+        q.push(s);
+        
+        umpp[s] = 1;
+        start = s;
+        len = s.size();
+        while(!q.empty()){
+            string word = q.front(); q.pop();
+            if(word == t){
+                break;
+            }
+            int steps = umpp[word];
+            for(int i = 0; i < len; i++){
+                char old = word[i];
+                for(char c = 'a'; c <= 'z'; c++){
+                    word[i] = c;
+                    if(st.find(word) != st.end()){
+                        q.push(word);
+                        st.erase(word);
+                        umpp[word] = steps+1;
+                    }
+                }
+                word[i] = old;
+            }
+        }
+        if(umpp.find(t) != umpp.end()){
+            vector<string> seq = {t};
+            dfs(t, seq);
         }
         return ans;
     }
