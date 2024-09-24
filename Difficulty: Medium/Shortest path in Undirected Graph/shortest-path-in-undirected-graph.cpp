@@ -6,32 +6,29 @@ using namespace std;
 
 // } Driver Code Ends
 // User function Template for C++
-typedef pair<int, int> pii;
 class Solution {
   public:
-    vector<int> shortestPath(vector<vector<int>>& edges, int N,int M, int src){
+    vector<int> shortestPath(vector<vector<int>>& edges, int n, int m, int src){
         // code here
-        vector<int> dis(N, INT_MAX);
-        vector<int> adj[N];
-        for(auto &edge: edges){
-            int u = edge[0], v = edge[1];
-            adj[u].push_back(v);
-            adj[v].push_back(u);
+        vector<int> dis(n, 1e5);
+        vector<int> adj[n];
+        for(vector<int> &edge: edges){
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]);
         }
         dis[src] = 0;
-        priority_queue<pii, vector<pii>, greater<pii>> pq;
-        pq.push({0, src});
-        while(!pq.empty()){
-            int cost = pq.top().first, node = pq.top().second;
-            pq.pop();
-            for(int nei: adj[node]){
-                if(dis[nei] > cost+1){
-                    dis[nei] = cost+1;
-                    pq.push({dis[nei], nei});
+        queue<int> q;
+        q.push(src);
+        while(!q.empty()){
+            int node = q.front(); q.pop();
+            for(int &nei: adj[node]){
+                if(dis[node] + 1 < dis[nei]){
+                    dis[nei] = 1 + dis[node];
+                    q.push(nei);
                 }
             }
         }
-        for(auto &d: dis) if(d == INT_MAX) d = -1;
+        for(int i = 0; i < n; i++) if(dis[i] == 1e5) dis[i] = -1;
         return dis;
     }
 };
