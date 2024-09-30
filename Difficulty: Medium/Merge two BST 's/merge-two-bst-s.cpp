@@ -94,25 +94,37 @@ struct Node {
 */
 class Solution {
     vector<int> ans;
+    void inOrder(Node *root, vector<int> &v){
+        if(!root) return ;
+        inOrder(root->left, v);
+        v.push_back(root->data);
+        inOrder(root->right, v);
+    }
+    void merge(vector<int> &a, vector<int> &b){
+        int i = 0, j = 0, n = a.size(), m = b.size();
+        while(i < n && j < m){
+            if(a[i] <= b[j]){
+                ans.push_back(a[i++]);
+            } else {
+                ans.push_back(b[j++]);
+            }
+        }
+        while(i < n){
+            ans.push_back(a[i++]);
+        }
+        while(j < m){
+            ans.push_back(b[j++]);
+        }
+    }
   public:
     // Function to return a list of integers denoting the node
     // values of both the BST in a sorted order.
-    void inOrder(Node *root){
-        if(!root) return ;
-        inOrder(root->left);
-        ans.push_back(root->data);
-        inOrder(root->right);
-    }
-    void fun(Node *root){
-        if(!root) return ;
-        fun(root->left);
-        int idx = lower_bound(ans.begin(), ans.end(), root->data) - ans.begin();
-        ans.insert(ans.begin() + idx, root->data);
-        fun(root->right);
-    }
     vector<int> merge(Node *root1, Node *root2) {
-        inOrder(root1);
-        fun(root2);
+        // Your code here
+        vector<int> a, b;
+        inOrder(root1, a);
+        inOrder(root2, b);
+        merge(a, b);
         return ans;
     }
 };
