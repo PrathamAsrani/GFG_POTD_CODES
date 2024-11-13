@@ -62,18 +62,14 @@ class Solution {
     // Function to find intersection point in Y shaped Linked Lists.
     int intersectPoint(Node* head1, Node* head2) {
         // Your Code Here
-        unordered_map<Node*, bool> mp;
-        while(head1){
-            mp[head1] = true;
-            head1 = head1->next;
+        if(!head1 || !head2)
+            return -1;
+        Node *a = head1, *b = head2;
+        while(a!=b){
+            a = a->next == nullptr ? head2 : a->next;
+            b = b->next == nullptr ? head1 : b->next;
         }
-        while(head2){
-            if(mp[head2]){
-                return head2->data;
-            }
-            head2 = head2->next;
-        }
-        return -1;
+        return a ? a->data : -1;
     }
 };
 
@@ -115,6 +111,7 @@ int main() {
             temp->next = common;
         Solution ob;
         cout << ob.intersectPoint(head1, head2) << endl;
+        cout << "~" << endl;
     }
     return 0;
 }
