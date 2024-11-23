@@ -1,42 +1,56 @@
 //{ Driver Code Starts
-//Initial template for C++
-
+// Initial template for C++
 #include <bits/stdc++.h>
 using namespace std;
 
-// } Driver Code Ends
-//User function Template for C++
 
-class Solution{   
-public:
-    int getMinDiff(int arr[], int n, int k) {
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution {
+  public:
+    int getMinDiff(int k, vector<int> &arr) {
         // code here
-        sort(arr, arr+n);
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
         int ans = arr[n-1] - arr[0];
         for(int i = 1; i < n; i++){
             int mx = max(arr[i-1] + k, arr[n-1] - k);
-            int mi = min(arr[i] - k, arr[0] + k);
+            int mi = min(arr[0] + k, arr[i] - k);
             ans = min(ans, mx-mi);
         }
         return ans;
     }
 };
 
+
 //{ Driver Code Starts.
 int main() {
     int t;
+
     cin >> t;
+    cin.ignore();
+
     while (t--) {
-        int n, k;
+        int k;
         cin >> k;
-        cin >> n;
-        int arr[n];
-        for (int i = 0; i < n; i++) {
-            cin >> arr[i];
+        cin.ignore();
+        vector<int> arr;
+        string input;
+        getline(cin, input);
+        stringstream ss(input);
+        int number;
+        while (ss >> number) {
+            arr.push_back(number);
         }
+        int n = arr.size();
         Solution ob;
-        auto ans = ob.getMinDiff(arr, n, k);
-        cout << ans << "\n";
+        int res = ob.getMinDiff(k, arr);
+        cout << res;
+
+        cout << "\n";
+        cout << "~"
+             << "\n";
     }
     return 0;
 }
