@@ -3,24 +3,25 @@
 
 using namespace std;
 
+
 // } Driver Code Ends
-//User function template for C++
-class Solution{
-public:
-    typedef long long ll;
-	// Function to find maximum product subarray
-	long long maxProduct(vector<int> arr, int n) {
-	    // code here
-	    ll mini, maxi, ans;
-	    mini = maxi = ans = arr[0];
-	    for(int i = 1; i < n; i++){
-	        ll tmp = max({(ll) arr[i], arr[i] * mini, arr[i] * maxi});
-	        mini = min({(ll) arr[i], arr[i]*mini, arr[i]*maxi});
-	        maxi = tmp;
-	        ans = max(ans, maxi);
-	    }
-	    return ans;
-	}
+// User function Template for C++
+class Solution {
+  public:
+    // Function to find maximum product subarray
+    int maxProduct(vector<int> &arr) {
+        // Your Code Here
+        int n = arr.size();
+        if(n <= 0) return 0;
+        long long maxi = arr[0], mini = arr[0], ans = arr[0];
+        for(int i = 1; i < n; i++){
+            long long tmp = max({(long long)arr[i], arr[i] * maxi, arr[i] * mini});
+            mini = min({(long long)arr[i], maxi * arr[i], mini * arr[i]});
+            maxi = tmp;
+            ans = max(maxi, ans);
+        }
+        return ans;
+    }
 };
 
 //{ Driver Code Starts.
@@ -28,16 +29,31 @@ public:
 int main() {
     int t;
     cin >> t;
+    cin.ignore();
     while (t--) {
-        int n, i;
-        cin >> n;
-        vector<int> arr(n);
-        for (i = 0; i < n; i++) {
-            cin >> arr[i];
+        // int n, i;
+        // cin >> n;
+        // vector<int> arr(n);
+        // for (i = 0; i < n; i++) {
+        //     cin >> arr[i];
+        // }
+
+        vector<int> arr;
+        string input;
+
+        // Read array
+        getline(cin, input);
+        stringstream ss(input);
+        int number;
+        while (ss >> number) {
+            arr.push_back(number);
         }
         Solution ob;
-        auto ans = ob.maxProduct(arr, n);
+        auto ans = ob.maxProduct(arr);
         cout << ans << "\n";
+
+        cout << "~"
+             << "\n";
     }
     return 0;
 }
