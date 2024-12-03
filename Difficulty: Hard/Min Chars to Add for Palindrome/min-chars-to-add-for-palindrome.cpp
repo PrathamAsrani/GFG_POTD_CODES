@@ -1,53 +1,53 @@
 //{ Driver Code Starts
 /* Driver program to test above function */
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
+
 
 // } Driver Code Ends
 
 class Solution {
-    int prefix(string &s){
-        int n = s.size();
-        int pi[n];
-        fill_n(pi, n, 0);
-        for(int i = 1; i < n; i++){
-            int prev = pi[i-1];
-            while(prev > 0 && s[prev] != s[i]){
-                prev = pi[prev-1];
-            }
-            if(s[prev] == s[i]){
-                prev++;
-            }
-            pi[i] = prev;
-        }
-        return pi[n-1];
-    }
 public:
-    int minChar(string str){
-        //Write your code here
-        string rev = str;
-        reverse(rev.begin(), rev.end());
-        string s = str + "$" + rev;
-        return str.size() - prefix(s);
+    int minChar(string &s) {
+        string rev_s = s;
+        reverse(rev_s.begin(), rev_s.end());
+        string concat = s + '#' + rev_s;
+        int n = concat.size();
+
+        vector<int> lps(n, 0);
+        for (int i = 1; i < n; i++) {
+            int j = lps[i - 1];
+            while (j > 0 && concat[i] != concat[j]) {
+                j = lps[j - 1];
+            }
+            if (concat[i] == concat[j]) {
+                j++;
+            }
+            lps[i] = j;
+        }
+
+        return s.size() - lps[n - 1];
     }
 };
 
 
+
 //{ Driver Code Starts.
-int main()
-{
-	int t;
-	cin>>t;
-	while(t--)
-	{
-	    string str;
-	    cin >> str;
-	    Solution ob;
-	    int ans = ob.minChar(str);
-	    cout << ans<<endl;
-	}
-	return 0;
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string str;
+        cin >> str;
+        Solution ob;
+        int ans = ob.minChar(str);
+        cout << ans << endl;
+
+        cout << "~"
+             << "\n";
+    }
+    return 0;
 }
 
 // } Driver Code Ends
