@@ -6,58 +6,45 @@ using namespace std;
 // } Driver Code Ends
 
 class Solution {
+    vector<int> prefix(string &s){
+        int n = s.size();
+        vector<int> pi(n, 0);
+        for(int i = 1; i < n; i++){
+            int prev = pi[i-1];
+            while(prev > 0 && s[prev] != s[i]){
+                prev = pi[prev-1];
+            }
+            if(s[prev] == s[i]){
+                prev++;
+            }
+            pi[i] = prev;
+        }
+        return pi;
+    }
+    bool KMP(string t, string p){
+        vector<int> pi = prefix(p);
+        int n = t.size(), m = p.size();
+        int i = 0, j = 0;
+        while(i < n){
+            if(t[i] == p[j]){
+                i++, j++;
+            } else {
+                if(j == m){
+                    return true;
+                }
+                else if (j != 0) {
+                    j = pi[j-1];
+                }
+                else {
+                    i++;
+                }
+            }
+        }
+        return false;
+    }
   public:
     // Function to check if two strings are rotations of each other or not.
-    vector<int> buildLPS(const string &pattern) {
-            int n = pattern.size();
-            vector<int> lps(n, 0);
-            int length = 0, i = 1;
-        
-            while (i < n) {
-                if (pattern[i] == pattern[length]) {
-                    length++;
-                    lps[i] = length;
-                    i++;
-                } else {
-                    if (length != 0) {
-                        length = lps[length - 1];
-                    } else {
-                        lps[i] = 0;
-                        i++;
-                    }
-                }
-            }
-            return lps;
-        }
-        
-        // KMP Substring Search
-        bool kmpSearch(const string &text, const string &pattern) {
-            vector<int> lps = buildLPS(pattern);
-            int i = 0, j = 0; // i -> text, j -> pattern
-        
-            while (i < text.size()) {
-                if (text[i] == pattern[j]) {
-                    i++;
-                    j++;
-                }
-                if (j == pattern.size()) {
-                    return true; // Match found
-                } else if (i < text.size() && text[i] != pattern[j]) {
-                    if (j != 0) {
-                        j = lps[j - 1];
-                    } else {
-                        i++;
-                    }
-                }
-            }
-            return false;
-        }
-        
-        // Check if s2 is a rotation of s1
-        bool areRotations(string s1, string s2) {
-            if (s1.length() != s2.length()) return false;
-            string concatenated = s1 + s1;
-            return kmpSearch(concatenated, s2);
+    bool areRotations(string &s1, string &s2) {
         // Your code here
         /*
         if(s1.size() != s2.size()) 
@@ -94,6 +81,15 @@ class Solution {
         return q1 == q2;
         */
         
+        /*
+        if(s1.size() != s2.size()) 
+            return false;
+        string res = s1+s1;
+        return res.find(s2) != -1;
+        */
+        
+        string res = s1+s1;
+        return KMP(res, s2);
     }
 };
 
