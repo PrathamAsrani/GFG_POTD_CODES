@@ -7,17 +7,17 @@ using namespace std;
 class Solution {
   public:
     void sort012(vector<int>& arr) {
-        int a, b, c;
-        a = b = c = 0;
-        for(int x: arr){
+        // code here
+        int a = 0, b = 0, c = 0;
+        for(int &x: arr){
             if(x == 0) a++;
             else if(x == 1) b++;
             else c++;
         }
         for(int &x: arr){
-            if(a) x = 0, a--;
-            else if(b) x = 1, b--;
-            else x = 2, c--;
+            if(a > 0) x = 0, a--;
+            else if(b >= 1) b--, x = 1;
+            else if(c >= 1) c--, x = 2;
         }
     }
 };
@@ -48,6 +48,7 @@ int main() {
         }
 
         cout << endl;
+        cout << "~" << endl;
     }
     return 0;
 }
