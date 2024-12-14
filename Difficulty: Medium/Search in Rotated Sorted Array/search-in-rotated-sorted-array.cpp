@@ -5,25 +5,26 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
-  public:
-    int helper(int l, int r, vector<int>& arr, int key) {
-        if(l > r) 
-            return -1;
-        int mid = (l+r)/2;
-        if(arr[mid] == key)
+    int find(vector<int> &arr, int l, int r, int &key){
+        if(l > r) return -1;
+        int mid = l+(r-l)/2;
+        if(arr[mid] == key){
             return mid;
-        int left = helper(l, mid-1, arr, key);
-        if(left != -1) {
+        }
+        int left = find(arr, l, mid-1, key);
+        if(left != -1){
             return left;
         }
-        int right = helper(mid+1, r, arr, key);
-        if(right != -1) {
+        int right = find(arr, mid+1, r, key);
+        if(right != -1){
             return right;
         }
         return -1;
     }
+  public:
     int search(vector<int>& arr, int key) {
-        return helper(0, arr.size()-1, arr, key);
+        // complete the function here
+        return find(arr, 0, arr.size()-1, key);
     }
 };
 
@@ -45,6 +46,7 @@ int main() {
         cin >> key;
         Solution ob;
         cout << ob.search(arr, key) << endl;
+        cout << "~" << endl;
     }
     return 0;
 }
