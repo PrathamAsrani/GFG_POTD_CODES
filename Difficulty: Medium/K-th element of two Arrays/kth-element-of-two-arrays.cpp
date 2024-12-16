@@ -4,36 +4,35 @@ using namespace std;
 
 
 // } Driver Code Ends
+
 class Solution {
+    int fun(vector<int> &a, vector<int> &b, int l1, int r1, int l2, int r2, int k){
+        if(l1 > r1) return b[l2+k];
+        if(l2 > r2) return a[l1+k];
+        
+        int m1 = (r1-l1)/2;
+        int m2 = (r2-l2)/2;
+        
+        if(m1+m2 < k){
+            if(a[l1+m1] > b[l2+m2])
+                return fun(a, b, l1, r1, l2+m2+1, r2, k-m2-1);
+            else 
+                return fun(a, b, l1+m1+1, r1, l2, r2, k-m1-1);
+        }
+        else {
+            if(a[l1+m1] > b[l2+m2])
+                return fun(a, b, l1, l1+m1-1, l2, r2, k);
+            else 
+                return fun(a, b, l1, r1, l2, l2+m2-1, k);
+        }
+    }
   public:
-    int kthElement(int k, vector<int>& a, vector<int>& b) {
-        // brute force 
-        // TC: O(min(k, max(n, m)))
-        int n = a.size(), m = b.size(), i = 0, j = 0;
-        while(i < n && j < m){
-            if(a[i] <= b[j]){
-                k--;
-                if(k == 0) return a[i];
-                i++;
-            } else {
-                k--;
-                if(k == 0) return b[j];
-                j++;
-            }
-        }
-        while(i < n){
-            k--;
-            if(k == 0) return a[i];
-            i++;
-        }
-        while(j < m){
-            k--;
-            if(k == 0) return b[j];
-            j++;
-        }
-        return -1;
+    int kthElement(vector<int>& a, vector<int>& b, int k) {
+        // code here
+        return fun(a, b, 0, a.size()-1, 0, b.size()-1, k-1);
     }
 };
+
 
 //{ Driver Code Starts.
 
@@ -48,22 +47,22 @@ int main() {
         cin.ignore();
         string input;
         int num;
-        vector<int> arr1, arr2;
+        vector<int> a, b;
 
         getline(cin, input);
         stringstream s2(input);
         while (s2 >> num) {
-            arr1.push_back(num);
+            a.push_back(num);
         }
 
         getline(cin, input);
         stringstream s3(input);
         while (s3 >> num) {
-            arr2.push_back(num);
+            b.push_back(num);
         }
 
         Solution ob;
-        cout << ob.kthElement(k, arr1, arr2) << endl;
+        cout << ob.kthElement(a, b, k) << endl << "~\n";
     }
     return 0;
 }
