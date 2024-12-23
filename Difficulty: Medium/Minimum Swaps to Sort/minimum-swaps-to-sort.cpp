@@ -1,6 +1,7 @@
 //{ Driver Code Starts
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
+
 
 // } Driver Code Ends
 
@@ -48,20 +49,24 @@ class Solution
 	}
 };
 
+
 //{ Driver Code Starts.
-int main(){
-	int tc;
-	cin >> tc;
-	while(tc--){
-		int n;
-		cin >> n;
-		vector<int>nums(n);
-		for(int i = 0; i < n; i++)
-			cin >> nums[i];
-		Solution obj;
-		int ans = obj.minSwaps(nums);
-		cout << ans <<"\n";
-	}
-	return 0;
+int main() {
+    string ts;
+    getline(cin, ts);
+    int t = stoi(ts);
+    while (t--) {
+        vector<int> arr;
+        string input;
+        getline(cin, input);
+        stringstream ss(input);
+        int number;
+        while (ss >> number) {
+            arr.push_back(number);
+        }
+        Solution obj;
+        cout << obj.minSwaps(arr) << endl;
+    }
 }
+
 // } Driver Code Ends
