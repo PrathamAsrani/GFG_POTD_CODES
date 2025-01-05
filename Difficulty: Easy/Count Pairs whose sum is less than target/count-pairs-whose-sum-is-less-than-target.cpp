@@ -19,11 +19,23 @@ class Solution {
         }
         return idx;
     }
+    void shellSort(vector<int> &arr, int n){
+        for(int gap = n/2; gap > 0; gap /= 2){
+            for(int i = gap; i < n; i++){
+                int tmp = arr[i];
+                int j;
+                for(j = i; j >= gap && arr[j-gap] > tmp; j -= gap)
+                    arr[j] = arr[j-gap];
+                arr[j] = tmp;
+            }
+        }
+    }
   public:
     int countPairs(vector<int> &arr, int target) {
         // Your code here
         int ans = 0;
-        sort(arr.begin(), arr.end());
+        // sort(arr.begin(), arr.end());
+        shellSort(arr, arr.size());
         for(int i = 0; i < arr.size(); i++){
             int x = target - arr[i] - 1;
             int idx = binary_search(arr, x);
