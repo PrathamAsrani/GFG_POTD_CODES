@@ -67,61 +67,48 @@ struct Node {
 */
 
 class Solution {
-  public:
-    // Function to add two numbers represented by linked list.
     Node *reverse(Node *head){
-        if(!head || !head->next) return head;
-        Node *curr = reverse(head->next);
-        head->next->next = head;
-        head->next = nullptr;
-        return curr;
+        Node *p = nullptr, *c = head, *n = nullptr;
+        while(c){
+            n = c->next;
+            c->next = p;
+            p = c;
+            c = n;
+        }
+        return p;
     }
-    Node* addTwoLists(Node* num1, Node* num2) {
+  public:
+    Node* addTwoLists(Node* a, Node* b) {
         // code here
-        Node *head = nullptr;
-        Node *ptr = nullptr;
-        num1 = reverse(num1);
-        num2 = reverse(num2);
-        int carry = 0, sum = 0;
-        while(num1 && num2){
-            sum = num1->data + num2->data + carry;
-            int rem = sum%10;
+        a = reverse(a);
+        b = reverse(b);
+        
+        Node dummy(0);
+        Node *tail = &dummy;
+        int carry = 0;
+        while(a || b){
+            int sum = carry;
+            if(a){
+                sum += a->data;
+                a = a->next;
+            }
+            if(b){
+                sum += b->data;
+                b = b->next;
+            }
             carry = sum/10;
-            if(!ptr) {
-                ptr = new Node(rem);
-                head = ptr;
-            } else {
-                ptr->next = new Node(rem);
-                ptr = ptr->next;
-            }
-            num1 = num1->next;
-            num2 = num2->next;
+            tail->next = new Node(sum%10);
+            tail = tail->next;
         }
-        if(carry){
-            ptr->next = new Node(carry);
-            ptr = ptr->next;
+        if(carry > 0){
+            tail->next = new Node(carry);
+            tail = tail->next;
         }
-        while(num1){
-            if(!ptr) {
-                ptr = new Node(num1->data);
-                head = ptr;
-            } else {
-                ptr->next = new Node(num1->data);
-                ptr = ptr->next;
-            }
-            num1 = num1->next;
+        tail = reverse(dummy.next);
+        while(tail && tail->data == 0){
+            tail = tail->next;
         }
-        while(num2){
-            if(!ptr) {
-                ptr = new Node(num2->data);
-                head = ptr;
-            } else {
-                ptr->next = new Node(num2->data);
-                ptr = ptr->next;
-            }
-            num2 = num2->next;
-        }
-        return reverse(head);
+        return tail;
     }
 };
 
@@ -139,6 +126,7 @@ int main() {
         Solution ob;
         Node* res = ob.addTwoLists(num1, num2);
         printList(res);
+        cout << "~" << endl;
     }
     return 0;
 }
