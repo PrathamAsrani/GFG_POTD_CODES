@@ -86,35 +86,20 @@ class Solution {
     // Function to remove a loop in the linked list.
     void removeLoop(Node* head) {
         // code here
-        // just remove the loop without losing any nodes
-        Node *s = head, *f = head;
-        s = s->next;
-        if(f->next) f = f->next->next;
-        while(f && f->next){
-            s = s->next;
-            f = f->next->next;
-            if(s == f) break;
-        }
-        if(s != f) return ;
-        // case 1 if s or f pointing to start
-        if(s == head){
-            while(f->next != s){
-                f = f->next;
+        if(!head) 
+            return ;
+        unordered_set<Node *> st;
+        Node *ptr = head;
+        while(ptr && ptr->next){
+            if(st.find(ptr->next) != st.end()){
+                ptr->next = nullptr;
+                return ;
             }
-            f->next = nullptr;
-        } 
-        // case 2: not pointing the start
-        else {
-            s = head;
-            while(s->next != f->next){
-                f = f->next;
-                s = s->next;
-            }
-            f->next = nullptr;
+            else st.insert(ptr);
+            ptr = ptr->next;
         }
     }
 };
-
 
 //{ Driver Code Starts.
 
@@ -162,6 +147,7 @@ int main() {
             cout << "false\n";
         else
             cout << "true\n";
+        cout << "~" << endl;
     }
     return 0;
 }
