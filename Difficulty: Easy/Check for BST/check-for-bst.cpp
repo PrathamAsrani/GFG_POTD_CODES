@@ -18,28 +18,27 @@ struct Node {
 
 // } Driver Code Ends
 class Solution {
+    bool isLeaf(Node *root){
+        if(!root) return 0;
+        return !root->left && !root->right;
+    }
   public:
     // Function to check whether a Binary Tree is BST or not.
-    vector<int> fun(Node *root){
-        if(!root) return {1, 1000000000, -1000000000};
-        vector<int> left = fun(root->left);
-        vector<int> right = fun(root->right);
-        // cout << left[0] << " " << left[1] << " " << left[2] << "\n";
-        // cout << right[0] << " " << right[1] << " " << right[2] << "\n";
-        // cout << "\n";
-        if(left[0] == 1 and right[0] == 1 and root->data > left[2] and root->data < right[1]){
+    vector<int> helper(Node *root){
+        if(!root) return {1, 1e9, -1e9};
+        vector<int> left = helper(root->left);
+        vector<int> right = helper(root->right);
+        if(left[0] && right[0] && root->data > left[2] && root->data < right[1]){
             int mini = min(root->data, left[1]);
             int maxi = max(root->data, right[2]);
             return {1, mini, maxi};
         }
         return {0, 0, 0};
     }
-    bool isBST(Node* root, int mini = -1000000000, int maxi = 1000000000) {
-        return fun(root)[0];
-        // if(!root) return 1;
-        // if(root->data <= mini || root->data >= maxi)
-        //     return 0;
-        // return isBST(root->left, mini, root->data) && isBST(root->right, root->data, maxi);
+    bool isBST(Node* root) {
+        // Your code here
+        if(!root || isLeaf(root)) return true;
+        return helper(root)[0];
     }
 };
 
@@ -138,6 +137,7 @@ int main() {
 
         else
             cout << "false\n";
+        cout << "~" << endl;
     }
     return 0;
 }
