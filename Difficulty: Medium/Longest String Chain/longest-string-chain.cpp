@@ -4,35 +4,35 @@ using namespace std;
 
 
 // } Driver Code Ends
+
 class Solution {
-  public:
-    bool isPredecessor(string &a, string &b){
-        if(a.size()+1 != b.size()) return false;
-        int i, j;
-        int n = a.size(), m = b.size();
+    int isPredecessor(string &a, string &b){
+        int n = a.size(), m = b.size(), i, j;
+        if(n+1 != m) 
+            return false;
         for(i = 0, j = 0; j < m; ){
             if(a[i] == b[j]){
                 i++, j++;
-            } else j++;
+            }
+            else j++;
         }
-        return i == n and j == m;
+        return i == n && j == m;
     }
-    int longestChain(int n, vector<string>& words) {
+  public:
+    int longestStringChain(vector<string>& words) {
         // Code here
-        sort(words.begin(), words.end(), [&](string &a, string &b){
+        sort(words.begin(), words.end(), [&](string &a, string &b) {
             return a.size() < b.size();
         });
-        int ans = 1;
+        int n = words.size();
         vector<int> dp(n, 1);
         for(int i = 1; i < n; i++){
             for(int j = 0; j < i; j++){
-                if(isPredecessor(words[j], words[i]) && dp[i] < dp[j]+1){
+                if(isPredecessor(words[j], words[i]) && dp[i] < dp[j]+1)
                     dp[i] = dp[j]+1;
-                    if(ans < dp[i]) ans = dp[i];
-                }
             }
         }
-        return ans;
+        return *max_element(dp.begin(), dp.end());
     }
 };
 
@@ -42,15 +42,20 @@ class Solution {
 int main() {
     int t;
     cin >> t;
+    cin.ignore();
     while (t--) {
-        int N;
-        cin >> N;
-        vector<string> words(N);
-        for (int i = 0; i < N; i++) {
-            cin >> words[i];
+        vector<string> words;
+        string input;
+        getline(cin, input);
+        stringstream ss(input);
+        string number;
+        while (ss >> number) {
+            words.push_back(number);
         }
         Solution obj;
-        cout << obj.longestChain(N, words) << "\n";
+        cout << obj.longestStringChain(words) << "\n";
+        cout << "~"
+             << "\n";
     }
     return 0;
 }
