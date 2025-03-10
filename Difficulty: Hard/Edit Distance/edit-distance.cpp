@@ -32,8 +32,34 @@ class Solution {
     int editDistance(string& s1, string& s2) {
         // code here
         n = s1.size(), m = s2.size();
-        dp.resize(n, vector<int>(m, -1));
-        return helper(s1, s2);
+        // dp.resize(n, vector<int>(m, -1));
+        // return helper(s1, s2);
+        
+        dp.resize(n+1, vector<int>(m+1, 0));
+        for(int i = 0; i <= n; i++){
+            dp[i][m] = n-i;
+        }
+        for(int j = 0; j <= m; j++){
+            dp[n][j] = m-j;
+        }
+        
+        for(int i = n-1; i >= 0; i--){
+            for(int j = m-1; j >= 0; j--){
+                int val = 0;
+                if(s1[i] == s2[j]){
+                    val = dp[i+1][j+1];
+                }
+                else {
+                    val = 1 + min({
+                        dp[i+1][j],
+                        dp[i][j+1],
+                        dp[i+1][j+1]
+                    });
+                }
+                dp[i][j] = val;
+            }
+        }
+        return dp[0][0];
     }
 };
 
