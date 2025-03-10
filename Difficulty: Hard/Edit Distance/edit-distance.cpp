@@ -1,50 +1,59 @@
 //{ Driver Code Starts
+// Initial Template for C++
 #include <bits/stdc++.h>
 using namespace std;
 
 
 // } Driver Code Ends
-class Solution {
-    vector<vector<int>> dp;
-    int n, m;
-    int fun(int i, int j, string &s, string &t){
-        if(i == n) return m-j;
-        if(j == m) return n-i;
-        if(dp[i][j] != -1) return dp[i][j];
 
-        int ans = 1e9;
+class Solution {
+    int n, m;
+    vector<vector<int>> dp;
+    int helper(string &s, string &t, int i = 0, int j = 0){
+        if(i == n) return m-j;
+        else if(j == m) return n-i;
+        else if(dp[i][j] != -1) return dp[i][j];
+        
+        int val = 0;
         if(s[i] == t[j]){
-            ans = fun(i+1, j+1, s, t);
-        } else {
-            ans = min({
-                fun(i+1, j, s, t), // delete i
-                fun(i, j+1, s, t), // insert 
-                fun(i+1, j+1, s, t) // replace
-            }) + 1;
+            val = helper(s, t, i+1, j+1);
         }
-        return dp[i][j] = ans;
+        else {
+            val = 1 + min({
+                helper(s, t, i+1, j),
+                helper(s, t, i, j+1),
+                helper(s, t, i+1, j+1)
+            });
+        }
+        return dp[i][j] = val;
     }
   public:
-    int editDistance(string s, string t) {
-        // Code here
-        n = s.size(), m = t.size();
-        
-        /*
-        dp.assign(n, vector<int>(m, -1));
-        return fun(0, 0, s, t);
+    // Function to compute the edit distance between two strings
+    int editDistance(string& s1, string& s2) {
+        // code here
+        n = s1.size(), m = s2.size();
+        dp.resize(n, vector<int>(m, -1));
+        return helper(s1, s2);
     }
 };
 
+
 //{ Driver Code Starts.
+
 int main() {
+
     int T;
     cin >> T;
+    cin.ignore();
     while (T--) {
-        string s, t;
-        cin >> s >> t;
+        string s1;
+        getline(cin, s1);
+        string s2;
+        getline(cin, s2);
         Solution ob;
-        int ans = ob.editDistance(s, t);
+        int ans = ob.editDistance(s1, s2);
         cout << ans << "\n";
+        cout << "~" << endl;
     }
     return 0;
 }
