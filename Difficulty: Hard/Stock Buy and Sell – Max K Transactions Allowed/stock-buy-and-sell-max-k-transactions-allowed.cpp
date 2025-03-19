@@ -1,16 +1,14 @@
 //{ Driver Code Starts
-// Initial template for C++
-
 #include <bits/stdc++.h>
 using namespace std;
 
+
 // } Driver Code Ends
-// User function Template for C++
 
 class Solution {
     int n;
     vector<vector<vector<int>>> dp;
-    int fun(int arr[], int i, int trans, bool buy){
+    int fun(vector<int>& arr, int i, int trans, bool buy){
         if(i == n || trans == 0) return 0;
         if(dp[i][trans][buy] != -1) return dp[i][trans][buy];
 
@@ -23,27 +21,40 @@ class Solution {
         return dp[i][trans][buy] = val;
     }
   public:
-    int maxProfit(int k, int n, int arr[]) {
-        // code here
-        this->n = n;
+    int maxProfit(vector<int>& prices, int k) {
+        this->n = prices.size();
         dp.resize(n, vector<vector<int>>(k+1, vector<int>(2, -1)));
-        return fun(arr, 0, k, true);
+        return fun(prices, 0, k, true);
     }
 };
 
+
 //{ Driver Code Starts.
+
 int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
+
     int t;
     cin >> t;
+    cin.ignore();
     while (t--) {
-        int N, K;
-        cin >> K;
-        cin >> N;
-        int A[N];
-        for (int i = 0; i < N; i++) cin >> A[i];
+        string input;
+        getline(cin, input);
+        istringstream iss(input);
+        vector<int> arr;
+        int num;
 
+        // Read integers from the input string
+        while (iss >> num) {
+            arr.push_back(num);
+        }
+        int k;
+        cin >> k;
+        cin.ignore();
         Solution ob;
-        cout << ob.maxProfit(K, N, A) << endl;
+        cout << ob.maxProfit(arr, k) << endl;
+        cout << "~" << endl;
     }
     return 0;
 }
