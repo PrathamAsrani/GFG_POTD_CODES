@@ -1,54 +1,32 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-// } Driver Code Ends
-class Solution{
-    typedef long long ll;
-    int n, fee;
-    vector<vector<ll>> dp;
-    
-    ll fun(vector<ll> &arr, int i, bool buy){
-        if(i == n) return 0;
-        if(dp[i][buy] != -1) return dp[i][buy];
+class Solution {
+    int n;
+    vector<vector<int>> dp;
+    int f(int idx, int buy, vector<int> &arr, int &k){
+        if(idx == n) return 0;
+        if(dp[idx][buy] != -1) return dp[idx][buy];
         
-        ll val = fun(arr, i+1, buy);
-        if(buy){
-            val = max(val, fun(arr, i+1, !buy) - arr[i]);
-        } else {
-            val = max(val, fun(arr, i+1, !buy) + arr[i] - fee);
+        int ans = 0;
+        if(buy == 0){
+            ans = max(
+                    f(idx+1, buy, arr, k), // buy in future
+                    f(idx+1, 1, arr, k) - arr[idx] // buy today
+                );
         }
-        return dp[i][buy] = val;
+        else if(buy == 1){
+            ans = max(
+                    f(idx+1, buy, arr, k), // sell in future
+                    f(idx+1, 0, arr, k) + arr[idx] - k // sell today
+                );
+        }
+        return dp[idx][buy] = ans;
     }
-    
-    public:
-    long long maximumProfit(vector<long long>&arr, int n, int fee) {
+  public:
+    int maxProfit(vector<int>& arr, int k) {
         // Code here
-        this->n = n, this->fee = fee;
-        dp.resize(n, vector<ll>(2, -1));
-        return fun(arr, 0, true);
+        // state 0: buy
+        // state 1: sell
+        this->n = arr.size();
+        dp.resize(n, vector<int>(2, -1));
+        return f(0, 0, arr, k);
     }
 };
-
-//{ Driver Code Starts.
-int main()
-{
-    int t;
-    cin>>t;
-    while(t--){
-        int n; cin>>n;
-        vector<long long> prices;
-        
-        for(int i=0; i<n; ++i){
-            long long x; cin>>x;
-            prices.push_back(x);
-        }
-        
-        int fee; cin>>fee;
-        
-        Solution obj;
-        cout<<obj.maximumProfit(prices, n, fee)<<"\n";
-    }
-    return 0;
-}
-// } Driver Code Ends
